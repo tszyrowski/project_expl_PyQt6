@@ -1,11 +1,12 @@
 from pathlib import Path
 import sys
 
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel
-from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QFont, QPixmap, QAction
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QMenuBar, QStatusBar, QMenu, QVBoxLayout
 
+class MainWindow(QMainWindow):
 
-class EmptyWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.initializeUI()
@@ -13,10 +14,31 @@ class EmptyWindow(QWidget):
     def initializeUI(self):
         self.setGeometry(200, 100, 600, 800)  # Adjusted window size
         self.setWindowTitle("First window")
+        self.setupMenuBar()
+        self.setupStatusBar()
         self.setUpMainWindow()
         self.show()
 
+    def setupMenuBar(self):
+        menu_bar = self.menuBar()
+        file_menu = menu_bar.addMenu('File')
+
+        exit_action = QAction('Exit', self)
+        exit_action.triggered.connect(self.close)
+        file_menu.addAction(exit_action)
+
+    def setupStatusBar(self):
+        status_bar = self.statusBar()
+        status_bar.showMessage('Ready')
+
     def setUpMainWindow(self):
+        # Create a central widget and set it
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        # Use a layout for the central widget
+        layout = QVBoxLayout()
+        central_widget.setLayout(layout)
         self.y = 15  # Using self.y as an instance variable
 
         # Create the main title label
@@ -79,5 +101,5 @@ class EmptyWindow(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = EmptyWindow()
+    window = MainWindow()
     sys.exit(app.exec())
