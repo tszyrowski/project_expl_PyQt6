@@ -1,9 +1,15 @@
 from pathlib import Path
 import sys
 
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap, QAction
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QMenuBar, QStatusBar, QMenu, QVBoxLayout
+from PyQt6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QLabel,
+    QVBoxLayout,
+)
 
 class MainWindow(QMainWindow):
 
@@ -39,36 +45,33 @@ class MainWindow(QMainWindow):
         # Use a layout for the central widget
         layout = QVBoxLayout()
         central_widget.setLayout(layout)
-        self.y = 15  # Using self.y as an instance variable
+        
+        layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         # Create the main title label
         main_lbl = QLabel(self)
         main_lbl.setText("App info")
         main_lbl.setFont(QFont("Arial", 20))
-        main_lbl.adjustSize()
-        main_lbl.move(105, self.y)
-        self.y += main_lbl.height() + 10
+        main_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(main_lbl)
 
         # Handle the first image
         img1 = f"{Path(__file__).parents[1]}/images/image1.png"
         try:
             with open(img1):
-                img_lbl = QLabel(self)
+                img_lbl = QLabel()
                 pixmap = QPixmap(img1)
                 img_lbl.setPixmap(pixmap)
-                img_lbl.adjustSize()
-                img_lbl.move(25, self.y)
-                self.y += img_lbl.height() + 10
+                img_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                layout.addWidget(img_lbl)
         except FileNotFoundError as e:
-            err_lbl = QLabel(self)
-            err_lbl.setText(f"{img1}\n{e.strerror}")
-            err_lbl.adjustSize()
-            err_lbl.move(25, self.y)
-            self.y += err_lbl.height() + 10
+            err_lbl = QLabel(f"{img1}\n{e.strerror}")
+            err_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout.addWidget(err_lbl)
 
-        self.createImageLabels()
+        self.createImageLabels(layout)
 
-    def createImageLabels(self):
+    def createImageLabels(self, layout):
         images = [
             f"{Path(__file__).parents[1]}/images/image2.png",
             f"{Path(__file__).parents[1]}/images/image3.png",
@@ -78,25 +81,21 @@ class MainWindow(QMainWindow):
             try:
                 with open(img):
                     # Create label for the description
-                    lbl_txt = QLabel(self)
-                    lbl_txt.setText(f"Description for:\n{img}")
-                    lbl_txt.adjustSize()
-                    lbl_txt.move(25, self.y)
-                    self.y += lbl_txt.height() + 5  # Update self.y
+                    lbl_txt = QLabel(f"Description for:\n{img}")
+                    lbl_txt.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    layout.addWidget(lbl_txt)
 
                     # Create label for the image
-                    lbl_img_inner = QLabel(self)
+                    lbl_img_inner = QLabel()
                     pixmap = QPixmap(img)
                     lbl_img_inner.setPixmap(pixmap)
-                    lbl_img_inner.adjustSize()
-                    lbl_img_inner.move(25, self.y)
-                    self.y += lbl_img_inner.height() + 10  # Update self.y
+                    lbl_img_inner.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    layout.addWidget(lbl_img_inner)
             except FileNotFoundError as e:
-                err_lbl = QLabel(self)
-                err_lbl.setText(f"{img}\n{e.strerror}")
-                err_lbl.adjustSize()
-                err_lbl.move(25, self.y)
-                self.y += err_lbl.height() + 10  # Update self.y
+                err_lbl = QLabel(f"{img}\n{e.strerror}")
+                err_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                layout.addWidget(err_lbl)
+
 
 
 if __name__ == "__main__":
