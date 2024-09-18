@@ -1,11 +1,11 @@
 import pytest
 from PyQt6.QtWidgets import QLabel
-from src.first_app import EmptyWindow
+from src.first_app import MainWindow
 
 
 @pytest.fixture
 def app(qtbot):
-    window = EmptyWindow()
+    window = MainWindow()
     qtbot.addWidget(window)
     return window
 
